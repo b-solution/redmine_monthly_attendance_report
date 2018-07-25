@@ -1,0 +1,49 @@
+<div class="flash notice" id="notice" style="display:none"></div>
+<div class="flash error" id="error" style="display:none"></div>
+<%= render partial: 'link' %>
+<h2>Monthly Attendance Report</h2>
+<div class="container">
+  <%= form_tag '' do %>
+
+      <p>
+        <label>Date</label>
+        <%= date_field_tag :date_from, params[:date_from].try(:to_date) %>
+      </p>
+      <%= submit_tag 'OK' %>
+  <% end %>
+</div>
+<hr/>
+<div class="autoscroll">
+  <% if @date_from %>
+      <table class="list table">
+        <thead>
+        <tr >
+         <th>Date</th>
+         <th>User</th>
+          <th>Task ID</th>
+          <th>Project</th>
+          <th>Task</th>
+         <th>Activity</th>
+         <th>Comment</th>
+         <th>Spent Time</th>
+         <th>% Done</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% TimeEntry.includes(:issue).where(time_entries: {spent_on: @date_from}).each do |time_entry| %>
+        <tr>
+          <td><%= time_entry.spent_on %></td>
+          <td><%= time_entry.user %></td>
+          <td><%= time_entry.issue_id %></td>
+          <td><%= link_to_project time_entry.project %></td>
+          <td><%= link_to_issue time_entry.issue %></td>
+          <td><%= time_entry.activity.to_s %></td>
+          <td><%= time_entry.comments %></td>
+          <td><%= format_hours time_entry.hours %></td>
+          <td><%= time_entry.issue.done_ratio %></td>
+        </tr>
+        <% end %>
+        </tbody>
+      </table>
+  <% end %>
+</div>

@@ -1,0 +1,27 @@
+<fieldset>
+  <legend></legend>
+  <p>
+    <strong>
+      Annual Leave
+    </strong>
+    <%= select_tag "settings[annual]", options_for_select(EasyAttendanceActivity.all.map{|i| [i.name, i.id]}, selected: @settings['annual']), {include_blank: true} %>
+  </p>
+
+  <p>
+    <strong>
+      Sick Leave
+    </strong>
+    <%= select_tag "settings[sick]", options_for_select(EasyAttendanceActivity.all.map{|i| [i.name, i.id]}, selected: @settings['sick']), {include_blank: true} %>
+  </p>
+
+  <p>
+    <strong>
+     Excuse Leave
+    </strong>
+    <%= select_tag "settings[excuse]", options_for_select(EasyAttendanceActivity.all.map{|i| [i.name, i.id]}, selected: @settings['excuse']), {include_blank: true} %>
+  </p>
+
+</fieldset>
+
+
+

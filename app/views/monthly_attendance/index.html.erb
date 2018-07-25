@@ -1,0 +1,130 @@
+<div class="flash notice" id="notice" style="display:none"></div>
+<div class="flash error" id="error" style="display:none"></div>
+<%= render partial: 'link' %>
+<h2>Monthly Attendance Report</h2>
+<div class="container">
+  <%= form_tag '' do %>
+      <%= render partial: 'filter_month' %>
+      <%= submit_tag 'OK' %>
+  <% end %>
+</div>
+<hr/>
+<div class="autoscroll">
+  <% if @user && @date_from && @date_to %>
+
+  <table class="list table">
+    <thead>
+    <tr >
+
+      <% begin_date = @date_from %>
+      <th></th>
+      <% while begin_date < @date_to %>
+          <th><%=  begin_date.strftime('%A %d %B %Y') %></th>
+          <% begin_date += 1.day %>
+      <% end %>
+      <th>total</th>
+    </tr>
+    </thead>
+    <tbody>
+
+
+    <% hash  = @hash%>
+    <tr>
+      <td>Recorded Hours</td>
+      <% begin_date = @date_from %>
+      <% while begin_date < @date_to %>
+          <td><%= hash[begin_date][0] %></td>
+          <% begin_date += 1.day %>
+      <% end %>
+      <td><%= hash.map{|h| h.last[0]}.flatten.sum.round(2) %></td>
+    </tr>
+
+    <tr>
+      <td>Annual Leaves</td>
+      <% begin_date = @date_from %>
+      <% while begin_date < @date_to %>
+          <td><%= hash[begin_date][1] %></td>
+          <% begin_date += 1.day %>
+      <% end %>
+      <td><%= hash.map{|h| h.last[1]}.flatten.sum.round(2) %></td>
+    </tr>
+
+    <tr>
+      <td> Sick Leaves</td>
+      <% begin_date = @date_from %>
+      <% while begin_date < @date_to %>
+          <td><%= hash[begin_date][2] %></td>
+          <% begin_date += 1.day %>
+      <% end %>
+      <td><%= hash.map{|h| h.last[2]}.flatten.sum.round(2) %></td>
+    </tr>
+
+    <tr>
+      <td>Excuses</td>
+      <% begin_date = @date_from %>
+      <% while begin_date < @date_to %>
+          <td><%= hash[begin_date][3] %></td>
+          <% begin_date += 1.day %>
+      <% end %>
+      <td><%= hash.map{|h| h.last[3]}.flatten.sum.round(2) %></td>
+    </tr>
+
+    <tr>
+      <td>Total Approved Hours</td>
+      <% begin_date = @date_from %>
+      <% while begin_date < @date_to %>
+          <td><%= hash[begin_date][4] %></td>
+          <% begin_date += 1.day %>
+      <% end %>
+      <td><%= hash.map{|h| h.last[4]}.flatten.sum.round(2) %></td>
+    </tr>
+
+
+
+    <tr>
+      <td>Daily working hours</td>
+      <% begin_date = @date_from %>
+      <% while begin_date < @date_to %>
+          <td><%= hash[begin_date][5] %></td>
+          <% begin_date += 1.day %>
+      <% end %>
+      <td></td>
+    </tr>
+
+    <tr>
+      <td> Min. Daily Productivity</td>
+      <% begin_date = @date_from %>
+      <% while begin_date < @date_to %>
+          <td><%= hash[begin_date][6] %></td>
+          <% begin_date += 1.day %>
+      <% end %>
+      <td></td>
+    </tr>
+    <% a = hash.map{|h| h.last[7]}.flatten.sum %>
+    <tr>
+      <td>Non approved Hours</td>
+      <% begin_date = @date_from %>
+      <% while begin_date < @date_to %>
+          <td style="<%= 'color: red' if hash[begin_date][7] < 0 %>"><%= hash[begin_date][7] < 0 ? "(#{hash[begin_date][7].abs})" : hash[begin_date][7] %></td>
+          <% begin_date += 1.day %>
+      <% end %>
+      <td style="<%= 'color: red' if a < 0 %>"><b><%= a < 0 ? "(#{(a.abs.round(2))})" : a %></b></td>
+    </tr>
+     <tr>
+      <td>Deducted Days</td>
+      <% begin_date = @date_from %>
+      <% while begin_date < @date_to %>
+          <td></td>
+          <% begin_date += 1.day %>
+      <% end %>
+       <td style="<%= 'color: red' if a < 0 %>"><%= a < 0 ? "(#{(a.abs/8).round(2)})" : 0 %></td>
+    </tr>
+
+    </tbody>
+  </table>
+  <% end %>
+</div>
+
+
+
+

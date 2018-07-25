@@ -1,0 +1,37 @@
+<% if  User.current.allowed_to_globally?(:view_others, {})  %>
+    <div>
+      <%= select_tag :user_id, options_for_select(User.active.order('firstname ASC').map{|user| [user.name, user.id] },
+                                                  selected: (params[:user_id] || User.current.id))%>
+    </div>
+<% end %>
+<fieldset>
+  <div>
+
+      <p>
+        <label>Month</label>
+        <%= text_field_tag :date_from, params[:date_from], class: 'date_picker_month_year' %>
+      </p>
+
+  </div>
+
+
+
+</fieldset>
+<script>
+    $('.date_picker_month_year').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: 'mm yy',
+        onClose: function(dateText, inst) {
+            $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+        },
+        "prevText":'<i class="fa fa-chevron-left"></i>',
+        "nextText":'<i class="fa fa-chevron-right"></i>'
+    });
+</script>
+<style>
+  .ui-datepicker-calendar {
+    display: none;
+  }
+</style>
