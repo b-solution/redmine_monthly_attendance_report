@@ -7,7 +7,7 @@
 
       <p>
         <label>Date</label>
-        <%= date_field_tag :date_from, params[:date_from].try(:to_date) %>
+        <%= date_field_tag :date_from, params[:date_from].try(:to_date), autocomplete: 'off' %>
       </p>
       <%= submit_tag 'OK' %>
   <% end %>

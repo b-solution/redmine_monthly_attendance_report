@@ -1,6 +1,8 @@
 class MonthlyAttendanceController < ApplicationController
   unloadable
 
+  before_filter :authorize_global
+
 
   def daily_report
     @date_from = Date.parse("#{params[:date_from]}".gsub(' ', '/')) rescue Date.today
