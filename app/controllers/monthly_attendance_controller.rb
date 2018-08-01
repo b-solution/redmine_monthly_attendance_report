@@ -5,6 +5,7 @@ class MonthlyAttendanceController < ApplicationController
 
 
   def daily_report
+    @user = User.find_by_id( params[:user_id])
     @date_from = Date.parse("#{params[:date_from]}".gsub(' ', '/')) rescue Date.today
   end
 
