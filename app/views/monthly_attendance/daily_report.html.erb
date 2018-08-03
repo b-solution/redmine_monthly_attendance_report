@@ -1,11 +1,11 @@
 <div class="flash notice" id="notice" style="display:none"></div>
 <div class="flash error" id="error" style="display:none"></div>
 <%= render partial: 'link' %>
-<h2>Monthly Attendance Report</h2>
+<h2>Daily Attendance Report</h2>
 <div class="container">
   <%= form_tag '' do %>
 
-      <% if User.current.allowed_to_globally?(:view_others, {}) %>
+      <% if User.current.allowed_to_globally?(:view_others_attendance, {}) %>
           <p>
             <%= select_tag :user_id, options_for_select(User.active.order('firstname ASC').map {|user| [user.name, user.id]},
                                                         selected: (params[:user_id] || User.current.id)), {include_blank: '--ALL--'} %>

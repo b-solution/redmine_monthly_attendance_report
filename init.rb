@@ -10,7 +10,8 @@ Redmine::Plugin.register :redmine_monthly_attendance_report do
       }
 
   project_module :monthly_attendance do
-    permission :view_monthly_attendance, { monthly_attendance: [:index, :daily_report]}
+    permission :view_own_attendance, { monthly_attendance: [:index, :daily_report]}
+    permission :view_others_attendance, { monthly_attendance: [:index, :daily_report]}
   end
 
   settings :default => {

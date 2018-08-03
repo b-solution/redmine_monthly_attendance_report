@@ -5,15 +5,23 @@ class MonthlyAttendanceController < ApplicationController
 
 
   def daily_report
-    @user = User.find_by_id( params[:user_id])
+    @user = if User.current.allowed_to_globally?(:view_others_attendance, {})
+              User.find_by_id( params[:user_id])
+            else
+              User.current
+            end
     @date_from = Date.parse("#{params[:date_from]}".gsub(' ', '/')) rescue Date.today
   end
 
   def index
     if request.post?
-      @user = User.find(params[:user_id])
-      @date_to = Date.parse( "01 #{params[:date_from]}".gsub(' ', '/')).end_of_month rescue nil
-      @date_from = Date.parse("01 #{params[:date_from]}".gsub(' ', '/')) rescue nil
+      @user = if User.current.allowed_to_globally?(:view_others_attendance, {})
+                User.find_by_id( params[:user_id])
+              else
+                User.current
+              end
+      @date_from = Date.parse("#{params[:date_from]}".gsub(' ', '/')) rescue Date.today
+      @date_to = Date.parse("#{params[:date_to]}".gsub(' ', '/')) rescue Date.today
 
       if @user && @date_from && @date_to
         @hash  = {}
@@ -53,7 +61,7 @@ class MonthlyAttendanceController < ApplicationController
           else
             @hash[begin_date]<< 0
           end
-                begin_date += 1.day
+          begin_date += 1.day
         end
       end
     end
