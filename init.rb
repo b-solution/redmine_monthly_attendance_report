@@ -21,3 +21,8 @@ Redmine::Plugin.register :redmine_monthly_attendance_report do
   }, :partial => 'monthly_attendance/settings/setting'
 
 end
+
+Rails.application.config.to_prepare do
+  Redmine::AccessControl.send(:include, RedmineAccessControl)
+end
+
