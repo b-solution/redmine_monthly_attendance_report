@@ -2,3 +2,5 @@
 en:
   permission_view_own_attendance: View Own
   permission_view_others_attendance: View Others
+  label_monthly_attendance: Monthly attendance
+  label_daily_report: Daily Reports
