@@ -2,12 +2,7 @@ Redmine::Plugin.register :redmine_monthly_attendance_report do
   name 'Redmine Monthly Attendance Report plugin'
   author 'Bilel KEDIDI'
   description 'This is a plugin for Redmine'
-  version '0.0.2'
-
-  # menu :top_menu, 'Monthly Attendance', {:controller => 'monthly_attendance', :action => 'index' },
-  #      :caption => 'Monthly Attendance', html: {class: 'icon icon-time'}, :if => Proc.new {
-  #       User.current.allowed_to_globally?(:view_monthly_attendance, {})
-  #     }
+  version '0.0.3'
 
   project_module :monthly_attendance do
     permission :view_own_attendance, { monthly_attendance: [:index, :daily_report]}
@@ -22,9 +17,7 @@ Redmine::Plugin.register :redmine_monthly_attendance_report do
 
 end
 
-Rails.application.config.to_prepare do
-  Redmine::AccessControl.send(:include, RedmineAccessControl)
-  EasyAttendancesHelper.send(:include, EasyAttendancesHelperPatch)
-  EasyAttendancesController.send(:include, EasyAttendancesControllerPatch)
+unless Redmine::Plugin.installed?(:easy_extensions)
+  require_relative 'after_init'
 end
 

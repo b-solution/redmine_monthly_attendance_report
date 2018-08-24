@@ -16,42 +16,42 @@
         <label>Date</label>
         <%= text_field_tag :date_from, params[:date_from].try(:to_date), autocomplete: 'off' %>
         <script>
-          $(function(){
-              $.datepicker._gotoToday = function(id) {
-                  var target = $(id);
-                  var inst = this._getInst(target[0]);
+            $(function(){
+                $.datepicker._gotoToday = function(id) {
+                    var target = $(id);
+                    var inst = this._getInst(target[0]);
 
-                  var date = new Date();
-                  this._setDate(inst,date);
-                  this._hideDatepicker();
+                    var date = new Date();
+                    this._setDate(inst,date);
+                    this._hideDatepicker();
 
-              }
-              $( "#date_from" ).datepicker({
-                  dateFormat: 'dd-mm-yy',
-                  showButtonPanel: true,
-                  beforeShow: function( input ) {
-                      setTimeout(function() {
-                          var buttonPane = $( input )
-                              .datepicker( "widget" )
-                              .find( ".ui-datepicker-buttonpane" );
+                }
+                $( "#date_from" ).datepicker({
+                    dateFormat: 'dd-mm-yy',
+                    showButtonPanel: true,
+                    beforeShow: function( input ) {
+                        setTimeout(function() {
+                            var buttonPane = $( input )
+                                .datepicker( "widget" )
+                                .find( ".ui-datepicker-buttonpane" );
 
-                          var btn = $('<button type="button" ' +
-                              'class="ui-datepicker-current ui-state-default ui-priority-secondary ui-corner-all">Yesterday</button>');
-                          btn
-                              .unbind("click")
-                              .bind("click", function () {
-                                  var nextDayDate = new Date();
-                                  nextDayDate.setDate(nextDayDate.getDate() - 1);
-                                  $('#date_from').datepicker('setDate', nextDayDate);
-                              });
+                            var btn = $('<button type="button" ' +
+                                'class="ui-datepicker-current ui-state-default ui-priority-secondary ui-corner-all">Yesterday</button>');
+                            btn
+                                .unbind("click")
+                                .bind("click", function () {
+                                    var nextDayDate = new Date();
+                                    nextDayDate.setDate(nextDayDate.getDate() - 1);
+                                    $('#date_from').datepicker('setDate', nextDayDate);
+                                });
 
-                          btn.appendTo( buttonPane );
+                            btn.appendTo( buttonPane );
 
-                      }, 1 );
-                  }
-              });
+                        }, 1 );
+                    }
+                });
 
-          })
+            })
         </script>
       </p>
       <%= submit_tag 'OK' %>
@@ -63,35 +63,35 @@
       <table class="list table" id="reporttable">
         <thead>
         <tr >
-         <th>Date</th>
-         <th>User</th>
+          <th>Date</th>
+          <th>User</th>
           <th>Task ID</th>
           <th>Project</th>
           <th>Task</th>
-         <th>Activity</th>
-         <th>Comment</th>
-         <th>Spent Time</th>
-         <th>% Done</th>
+          <th>Activity</th>
+          <th>Comment</th>
+          <th>Spent Time</th>
+          <th>% Done</th>
         </tr>
         </thead>
         <tbody>
         <% scope =  TimeEntry.includes(:issue).where(time_entries: {spent_on: @date_from}) %>
 
         <% if @user %>
-        <% scope = scope.where(user_id: @user.id) %>
+            <% scope = scope.where(user_id: @user.id) %>
         <% end %>
         <% scope.each do |time_entry| %>
-        <tr>
-          <td><%= time_entry.spent_on %></td>
-          <td><%= time_entry.user %></td>
-          <td><%= time_entry.issue_id %></td>
-          <td><%= link_to_project time_entry.project %></td>
-          <td><%= link_to_issue time_entry.issue %></td>
-          <td><%= time_entry.activity.to_s %></td>
-          <td><%= time_entry.comments %></td>
-          <td><%= format_hours time_entry.hours %></td>
-          <td><%= time_entry.issue.done_ratio %></td>
-        </tr>
+            <tr>
+              <td><%= time_entry.spent_on %></td>
+              <td><%= time_entry.user %></td>
+              <td><%= time_entry.issue_id %></td>
+              <td><%= link_to_project time_entry.project %></td>
+              <td><%= link_to_issue time_entry.issue %></td>
+              <td><%= time_entry.activity.to_s %></td>
+              <td><%= time_entry.comments %></td>
+              <td><%= format_hours time_entry.hours %></td>
+              <td><%= time_entry.issue.done_ratio %></td>
+            </tr>
         <% end %>
         </tbody>
       </table>
