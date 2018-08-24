@@ -1,8 +1,8 @@
 ActiveSupport.on_load(:easyproject, yield: true) do
   Redmine::MenuManager.map :top_menu do |menu|
-    menu.push('Monthly Attendance', {:controller => 'monthly_attendance', :action => 'index' }, {
+    menu.push('Other Reports', {:controller => 'monthly_attendance', :action => 'index' }, {
         :parent => :easy_attendances,
-        :caption => 'Monthly Attendance',
+        :caption => 'Other Reports',
         :if => Proc.new { User.current.allowed_to_globally?(:view_monthly_attendance, {})},
     })
   end
