@@ -17,7 +17,7 @@ Redmine::Plugin.register :redmine_monthly_attendance_report do
 
 end
 
-unless Redmine::Plugin.installed?(:easy_extensions)
-  require_relative 'after_init'
+Rails.application.config.to_prepare do
+  Redmine::AccessControl.send(:include, RedmineAccessControl)
 end
 
