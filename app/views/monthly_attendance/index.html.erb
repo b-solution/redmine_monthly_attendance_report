@@ -19,7 +19,8 @@
           <% begin_date = @date_from %>
           <th></th>
           <% while begin_date < @date_to %>
-              <th><%=  begin_date.strftime('%A %d %B %Y') %></th>
+              <th><%=  begin_date.strftime('%A')[0..2] %><br/>
+                <%=  begin_date.strftime('%m-%d') %></th>
               <% begin_date += 1.day %>
           <% end %>
           <th>total</th>
