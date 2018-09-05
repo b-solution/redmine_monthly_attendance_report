@@ -56,7 +56,7 @@ class MonthlyAttendanceController < ApplicationController
           if (approved + time) > @hash[begin_date][5]
             @hash[begin_date]<< ((approved + time) - @hash[begin_date][5] ).round(2)
           elsif (approved + time) < @hash[begin_date][6]
-            @hash[begin_date]<< ((approved + time) - @hash[begin_date][5] ).round(2)
+            @hash[begin_date]<< ((approved + time) - @hash[begin_date][6] ).round(2)
           else
             @hash[begin_date]<< 0
           end
