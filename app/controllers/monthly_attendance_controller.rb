@@ -29,7 +29,7 @@ class MonthlyAttendanceController < ApplicationController
         excuse =  EasyAttendanceActivity.find_by_id(setting['excuse']).id
         sick =  EasyAttendanceActivity.find_by_id(setting['sick']).id
         begin_date = @date_from
-        while begin_date < @date_to
+        while begin_date <= @date_to
 
           @hash[begin_date] = []
           time = TimeEntry.where(user_id: @user.id).where(spent_on: begin_date).sum(:hours).round(2)

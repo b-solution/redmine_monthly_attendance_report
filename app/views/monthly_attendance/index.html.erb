@@ -18,7 +18,7 @@
 
           <% begin_date = @date_from %>
           <th></th>
-          <% while begin_date < @date_to %>
+          <% while begin_date <= @date_to %>
               <th><%=  begin_date.strftime('%A')[0..2] %><br/>
                 <%=  begin_date.strftime('%m-%d') %></th>
               <% begin_date += 1.day %>
@@ -33,7 +33,7 @@
         <tr>
           <td>Recorded Hours</td>
           <% begin_date = @date_from %>
-          <% while begin_date < @date_to %>
+          <% while begin_date <= @date_to %>
               <td><%= hash[begin_date][0] %></td>
               <% begin_date += 1.day %>
           <% end %>
@@ -43,7 +43,7 @@
         <tr>
           <td>Annual Leaves</td>
           <% begin_date = @date_from %>
-          <% while begin_date < @date_to %>
+          <% while begin_date <= @date_to %>
               <td><%= hash[begin_date][1] %></td>
               <% begin_date += 1.day %>
           <% end %>
@@ -53,7 +53,7 @@
         <tr>
           <td> Sick Leaves</td>
           <% begin_date = @date_from %>
-          <% while begin_date < @date_to %>
+          <% while begin_date <= @date_to %>
               <td><%= hash[begin_date][2] %></td>
               <% begin_date += 1.day %>
           <% end %>
@@ -63,7 +63,7 @@
         <tr>
           <td>Excuses</td>
           <% begin_date = @date_from %>
-          <% while begin_date < @date_to %>
+          <% while begin_date <= @date_to %>
               <td><%= hash[begin_date][3] %></td>
               <% begin_date += 1.day %>
           <% end %>
@@ -73,7 +73,7 @@
         <tr>
           <td>Total Approved Hours</td>
           <% begin_date = @date_from %>
-          <% while begin_date < @date_to %>
+          <% while begin_date <= @date_to %>
               <td><%= hash[begin_date][4] %></td>
               <% begin_date += 1.day %>
           <% end %>
@@ -85,7 +85,7 @@
         <tr>
           <td>Daily working hours</td>
           <% begin_date = @date_from %>
-          <% while begin_date < @date_to %>
+          <% while begin_date <= @date_to %>
               <td><%= hash[begin_date][5] %></td>
               <% begin_date += 1.day %>
           <% end %>
@@ -95,7 +95,7 @@
         <tr>
           <td> Min. Daily Productivity</td>
           <% begin_date = @date_from %>
-          <% while begin_date < @date_to %>
+          <% while begin_date <= @date_to %>
               <td><%= hash[begin_date][6] %></td>
               <% begin_date += 1.day %>
           <% end %>
@@ -105,7 +105,7 @@
         <tr>
           <td>Non approved Hours</td>
           <% begin_date = @date_from %>
-          <% while begin_date < @date_to %>
+          <% while begin_date <= @date_to %>
               <td style="<%= 'color: red' if hash[begin_date][7] < 0 %>"><%= hash[begin_date][7] < 0 ? "(#{hash[begin_date][7].abs})" : hash[begin_date][7] %></td>
               <% begin_date += 1.day %>
           <% end %>
@@ -114,7 +114,7 @@
         <tr>
           <td>Deducted Days</td>
           <% begin_date = @date_from %>
-          <% while begin_date < @date_to %>
+          <% while begin_date <= @date_to %>
               <td></td>
               <% begin_date += 1.day %>
           <% end %>
