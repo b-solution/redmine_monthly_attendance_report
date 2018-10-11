@@ -3,7 +3,7 @@
   <%= link_to 'Daily Report', '/daily_report' %>
 
   <input type="button"
-         onclick="tableToExcel('reporttable', 'Report')"
+         onclick="$('.affix-cell-wrap').remove();tableToExcel('reporttable', 'Report')"
          value="Export to Excel"
          class="btn btn-primary">
 
