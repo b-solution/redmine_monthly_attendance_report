@@ -33,18 +33,26 @@ class MonthlyAttendanceController < ApplicationController
 
           @hash[begin_date] = []
           time = TimeEntry.where(user_id: @user.id).where(spent_on: begin_date).sum(:hours).round(2)
+          # Recorded hours
           @hash[begin_date]<< time
 
 
           scope =  EasyAttendance.where(user_id: @user.id).between(begin_date, begin_date).where(approval_status: EasyAttendance::APPROVAL_APPROVED)
+
+          # Leaves
           @hash[begin_date]<< scope.where(easy_attendance_activity_id: leave).map{|a| ((a.departure - a.arrival).to_i/3600).to_i}.sum
           @hash[begin_date]<< scope.where(easy_attendance_activity_id: sick).map{|a|  ((a.departure - a.arrival).to_i/3600).to_i}.sum
           @hash[begin_date]<< scope.where(easy_attendance_activity_id: excuse).map{|a|  ((a.departure - a.arrival).to_i/3600).to_i}.sum
-          approved =  EasyAttendance.where(easy_attendance_activity_id: [sick, leave, excuse]).where(user_id: @user.id).where(approval_status: EasyAttendance::APPROVAL_APPROVED).
+
+          approved =  EasyAttendance.where(easy_attendance_activity_id: [sick, leave, excuse]).
+              where(user_id: @user.id).where(approval_status: EasyAttendance::APPROVAL_APPROVED).
               between(begin_date, begin_date).map{|a|  ((a.departure - a.arrival).to_i/3600).to_i}.sum
-          @hash[begin_date]<< (approved + time)
+
+          # Total approved hours
+          @hash[begin_date]<< (approved + time).to_f.round(2)
           a = (EasyUserWorkingTimeCalendar.where(user_id: @user.id) ||  EasyUserWorkingTimeCalendar.where(:is_default=> true)).last
 
+          # Daily working hours (5) + min daily productivity (6)
           if EasyUserTimeCalendarHoliday.where(holiday_date: begin_date ).present? or !a.working_week_days.map{|d| d == 7 ? 0 : d }.include?(begin_date.wday)
             @hash[begin_date]<< 0
             @hash[begin_date]<< 0
@@ -53,10 +61,11 @@ class MonthlyAttendanceController < ApplicationController
             @hash[begin_date]<< (a.default_working_hours - 1).round(2)
           end
 
-          if (approved + time) > @hash[begin_date][5]
-            @hash[begin_date]<< ((approved + time) - @hash[begin_date][5] ).round(2)
-          elsif (approved + time) < @hash[begin_date][6]
-            @hash[begin_date]<< ((approved + time) - @hash[begin_date][6] ).round(2)
+          # Non approved hours (7)
+          if @hash[begin_date][4].to_f >= @hash[begin_date][5]
+            @hash[begin_date]<< (@hash[begin_date][4].to_f - @hash[begin_date][5] ).round(2)
+          elsif @hash[begin_date][4].to_f < @hash[begin_date][6]
+            @hash[begin_date]<< (@hash[begin_date][4].to_f - @hash[begin_date][6] ).round(2)
           else
             @hash[begin_date]<< 0
           end
