@@ -1,7 +1,7 @@
 class MonthlyAttendanceController < ApplicationController
   unloadable
 
-  before_filter :authorize_global
+  before_action :authorize_global
 
   def daily_report
     @user = if User.current.allowed_to_globally?(:view_others_attendance, {})
@@ -28,6 +28,7 @@ class MonthlyAttendanceController < ApplicationController
         leave =  EasyAttendanceActivity.find_by_id(setting['annual']).id
         excuse =  EasyAttendanceActivity.find_by_id(setting['excuse']).id
         sick =  EasyAttendanceActivity.find_by_id(setting['sick']).id
+        time_record_compensation =  EasyAttendanceActivity.find_by_id(setting['time_record_compensation']).id
         begin_date = @date_from
         while begin_date <= @date_to
 
@@ -40,13 +41,14 @@ class MonthlyAttendanceController < ApplicationController
           scope =  EasyAttendance.where(user_id: @user.id).between(begin_date, begin_date).where(approval_status: EasyAttendance::APPROVAL_APPROVED)
 
           # Leaves
-          @hash[begin_date]<< scope.where(easy_attendance_activity_id: leave).map{|a| ((a.departure - a.arrival).to_i/3600).to_i}.sum
-          @hash[begin_date]<< scope.where(easy_attendance_activity_id: sick).map{|a|  ((a.departure - a.arrival).to_i/3600).to_i}.sum
-          @hash[begin_date]<< scope.where(easy_attendance_activity_id: excuse).map{|a|  ((a.departure - a.arrival).to_i/3600).to_i}.sum
+          @hash[begin_date]<< scope.where(easy_attendance_activity_id: leave).map{|a| ((a.departure - a.arrival).to_i/3600).to_f}.sum
+          @hash[begin_date]<< scope.where(easy_attendance_activity_id: sick).map{|a|  ((a.departure - a.arrival).to_i/3600).to_f}.sum
+          @hash[begin_date]<< scope.where(easy_attendance_activity_id: excuse).map{|a|  ((a.departure - a.arrival).to_i/3600).to_f}.sum
+          @hash[begin_date]<< scope.where(easy_attendance_activity_id: time_record_compensation).map{|a|  ((a.departure - a.arrival).to_i/3600).to_f}.sum
 
-          approved =  EasyAttendance.where(easy_attendance_activity_id: [sick, leave, excuse]).
+          approved =  EasyAttendance.where(easy_attendance_activity_id: [sick, leave, excuse, time_record_compensation]).
               where(user_id: @user.id).where(approval_status: EasyAttendance::APPROVAL_APPROVED).
-              between(begin_date, begin_date).map{|a|  ((a.departure - a.arrival).to_i/3600).to_i}.sum
+              between(begin_date, begin_date).map{|a|  ((a.departure - a.arrival).to_i/3600).to_f}.sum
 
           # Total approved hours
           @hash[begin_date]<< (approved + time).to_f.round(2)

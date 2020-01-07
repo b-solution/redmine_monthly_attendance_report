@@ -20,7 +20,7 @@
           <% while begin_date <= @date_to %>
               <th>
                 <%=  begin_date.strftime('%A')[0..2] %><br/>
-                <%=  begin_date.strftime('%m-%d') %></th>
+                <%=  begin_date.strftime('%B-%d') %></th>
               <% begin_date += 1.day %>
           <% end %>
           <th>total</th>
@@ -69,15 +69,23 @@
           <% end %>
           <td><%= hash.map{|h| h.last[3]}.flatten.sum.round(2) %></td>
         </tr>
-
+        <tr>
+          <td> Time Recording Compensation </td>
+          <% begin_date = @date_from %>
+          <% while begin_date <= @date_to %>
+            <td><%= hash[begin_date][4] %></td>
+            <% begin_date += 1.day %>
+          <% end %>
+          <td></td>
+        </tr>
         <tr>
           <td>Total Approved Hours</td>
           <% begin_date = @date_from %>
           <% while begin_date <= @date_to %>
-              <td><%= hash[begin_date][4] %></td>
+              <td><%= hash[begin_date][5] %></td>
               <% begin_date += 1.day %>
           <% end %>
-          <td><%= hash.map{|h| h.last[4]}.flatten.sum.round(2) %></td>
+          <td><%= hash.map{|h| h.last[5]}.flatten.sum.round(2) %></td>
         </tr>
 
 
@@ -86,7 +94,7 @@
           <td>Daily working hours</td>
           <% begin_date = @date_from %>
           <% while begin_date <= @date_to %>
-              <td><%= hash[begin_date][5] %></td>
+              <td><%= hash[begin_date][6] %></td>
               <% begin_date += 1.day %>
           <% end %>
           <td></td>
@@ -96,20 +104,20 @@
           <td> Min. Daily Productivity</td>
           <% begin_date = @date_from %>
           <% while begin_date <= @date_to %>
-              <td><%= hash[begin_date][6] %></td>
+              <td><%= hash[begin_date][7] %></td>
               <% begin_date += 1.day %>
           <% end %>
           <td></td>
         </tr>
-        <% a = hash.map{|h| h.last[7]}.flatten.sum %>
+        <% a = hash.map{|h| h.last[8]}.flatten.sum %>
         <tr>
           <td>Non approved Hours</td>
           <% begin_date = @date_from %>
           <% while begin_date <= @date_to %>
-              <td style="<%= 'color: red' if hash[begin_date][7] < 0 %>"><%= hash[begin_date][7] < 0 ? "(#{hash[begin_date][7].abs})" : hash[begin_date][7] %></td>
+              <td style="<%= 'color: red' if hash[begin_date][7] < 0 %>"><%= hash[begin_date][7] < 0 ? "(#{hash[begin_date][8].abs})" : hash[begin_date][8].round(2) %></td>
               <% begin_date += 1.day %>
           <% end %>
-          <td style="<%= 'color: red' if a < 0 %>"><b><%= a < 0 ? "(#{(a.abs.round(2))})" : a %></b></td>
+          <td style="<%= 'color: red' if a < 0 %>"><b><%= a < 0 ? "(#{(a.abs.round(2))})" : a.round(2) %></b></td>
         </tr>
         <tr>
           <td>Deducted Days</td>
@@ -120,7 +128,6 @@
           <% end %>
           <td style="<%= 'color: red' if a < 0 %>"><%= a < 0 ? "(#{(a.abs/8).round(2)})" : 0 %></td>
         </tr>
-
         </tbody>
       </table>
   <% end %>

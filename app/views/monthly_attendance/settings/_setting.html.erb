@@ -20,6 +20,12 @@
     </strong>
     <%= select_tag "settings[excuse]", options_for_select(EasyAttendanceActivity.all.map{|i| [i.name, i.id]}, selected: @settings['excuse']), {include_blank: true} %>
   </p>
+ <p>
+    <strong>
+    Tme Recording Compensation
+    </strong>
+    <%= select_tag "settings[time_record_compensation]", options_for_select(EasyAttendanceActivity.all.map{|i| [i.name, i.id]}, selected: @settings['time_record_compensation']), {include_blank: true} %>
+  </p>
 
 </fieldset>
 

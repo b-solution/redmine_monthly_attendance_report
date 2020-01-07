@@ -13,6 +13,7 @@ Redmine::Plugin.register :redmine_monthly_attendance_report do
       "annual"  => 6,
       "sick"  => 8,
       "excuse"  => 7,
+      "time_record_compensation"  => 9,
   }, :partial => 'monthly_attendance/settings/setting'
 
 end
